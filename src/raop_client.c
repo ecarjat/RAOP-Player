@@ -307,10 +307,17 @@ static int rsa_encrypt(u8_t *text, int len, u8_t *res)
     char e[] = "AQAB";
 
 	rsa = RSA_new();
-	size = base64_decode(n, modules);
+
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
+        size = base64_decode(n, modules);
 	rsa->n = BN_bin2bn(modules, size, NULL);
 	size = base64_decode(e, exponent);
 	rsa->e = BN_bin2bn(exponent, size, NULL);
+#else
+        int size_n = base64_decode(n, modules);
+        int size_e = base64_decode(e, exponent);
+        RSA_set0_key(rsa, BN_bin2bn(modules, size_n, NULL),BN_bin2bn(exponent, size, NULL), NULL); 
+#endif
 	size = RSA_public_encrypt(len, text, res, rsa, RSA_PKCS1_OAEP_PADDING);
 	RSA_free(rsa);
 

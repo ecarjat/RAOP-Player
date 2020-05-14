@@ -6,4 +6,4 @@
 	url = https://github.com/msotoodeh/curve25519.git
 [submodule "vendor/valgrind"]
 	path = vendor/valgrind
-	url = git://sourceware.org/valgrind.git
+	url = git://sourceware.org/git/valgrind.git
